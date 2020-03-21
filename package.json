@@ -1,0 +1,6 @@
+{
+  "name" : "openstreetmap-on-heroku", 
+  "dependencies": {
+      "mapnik": "*", 
+  }
+}
