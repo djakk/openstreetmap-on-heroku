@@ -69,8 +69,8 @@ http.createServer(function(req, res) {
         }
       });
     }
+  });
   } catch(err2) {
     res.end(err2.message);
   };
-  });
 }).listen(port);
