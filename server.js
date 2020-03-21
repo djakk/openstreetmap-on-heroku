@@ -13,7 +13,7 @@ http.createServer(function(req, res) {
     
   res.writeHead(500, {'Content-Type': 'text/plain'});
   
-  
+  try {
   // map with just a style
   // eventually the api will support adding styles in javascript (!)
   var s = '<Map srs="+proj=longlat +ellps=WGS84 +datum=WGS84 +no_defs">';
@@ -69,5 +69,7 @@ http.createServer(function(req, res) {
         }
       });
     }
+  } catch(err2) {
+  res.end(err2.message);
   });
 }).listen(port);
