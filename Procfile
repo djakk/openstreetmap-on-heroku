@@ -1,2 +1,1 @@
-worker: curl https://download.geofabrik.de/europe/france/bretagne-latest.osm.pbf > bretagne-latest.osm.pbf
-web: node server.js
+web: curl https://download.geofabrik.de/europe/france/bretagne-latest.osm.pbf > bretagne-latest.osm.pbf && node server.js
