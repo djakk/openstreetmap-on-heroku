@@ -10,3 +10,10 @@ Prepare the database through = "heroku run --app my-heroku-app bash" :
     CREATE EXTENSION hstore;
     
     CREATE TABLE "mytable" ("osm_id"  bigint, "osm_type"  text, "properties"  hstore, "geometry"  geometry);
+
+
+With a buildpack already installed (nodejs) : 
+heroku buildpacks:add --index 1 heroku-community/apt
+
+Check : 
+heroku buildpacks --app openstreetmap-on-heroku
