@@ -43,8 +43,8 @@ http.createServer(function(req, res) {
     dbname: the_database_url.pathname.substring(1), 
     user: the_database_url.username,
     password: the_database_url.password, 
-    table: "(SELECT way AS geometry, 'red' AS colour FROM planet_osm_line) AS roads", 
-    geometry_field: 'geometry'
+    table: "(SELECT way, 'red' AS colour FROM planet_osm_line) AS roads", 
+    geometry_field: 'way'
   };
   
   var the_points_datasource = new mapnik.Datasource(options);
