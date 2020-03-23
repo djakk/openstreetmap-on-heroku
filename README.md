@@ -17,3 +17,6 @@ heroku buildpacks:add --index 1 heroku-community/apt
 
 Check : 
 heroku buildpacks --app openstreetmap-on-heroku
+
+Reminder : looking at the logs : 
+heroku logs --tail --app openstreetmap-on-heroku
