@@ -18,5 +18,9 @@ heroku buildpacks:add --index 1 heroku-community/apt
 Check : 
 heroku buildpacks --app openstreetmap-on-heroku
 
+Execute once osm2pgsql : 
+echo $DATABASE_URL
+osm2pgsql -c -d DATABASE_NAME --slim map.osm --style default.style -H DATABASE_HOST -W -U DATABASE_USERNAME --number-processes 1
+
 Reminder : looking at the logs : 
 heroku logs --tail --app openstreetmap-on-heroku
