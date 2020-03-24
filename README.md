@@ -13,7 +13,10 @@ Prepare the database through = "heroku run --app my-heroku-app bash" :
 
 
 With a buildpack already installed (nodejs) : 
-heroku buildpacks:add --index 1 heroku-community/apt
+heroku buildpacks:add --index 1 heroku-community/apt --app openstreetmap-on-heroku
+
+Add nginx : 
+heroku buildpacks:add heroku-community/nginx --app openstreetmap-on-heroku
 
 Check : 
 heroku buildpacks --app openstreetmap-on-heroku
