@@ -1,2 +1,2 @@
-web: bin/start-nginx bundle exec node server.js
+web: bin/start-nginx  node server.js
 worker: osm2pgsql -h
