@@ -1,6 +1,7 @@
 {
   "name" : "openstreetmap-on-heroku", 
   "dependencies": {
-      "mapnik": "*"
+      "mapnik": "*", 
+      "tessella" : "*"
   }
 }
