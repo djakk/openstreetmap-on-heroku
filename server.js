@@ -21,7 +21,7 @@ const dbConfig = {
     geometry_field: 'way'
 };
 
-
+// many thanks to https://smallmultiples.com.au/articles/building-large-maps-with-a-node.js-tile-server/ !!
 const createVectorTile = (sql,{ x, y, z }) => {
   const map = new mapnik.Map(256, 256, proj4);
   let layer = new mapnik.Layer('tile', proj4);
