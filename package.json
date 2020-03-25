@@ -2,6 +2,6 @@
   "name" : "openstreetmap-on-heroku", 
   "dependencies": {
       "mapnik": "*", 
-      "tessella" : "*"
+      "express" : "*"
   }
 }
