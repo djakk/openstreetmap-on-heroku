@@ -49,28 +49,22 @@ const createVectorTile = (sql,{ x, y, z }) => {
 
 app.get('/:x/:y/:z.mvt', async (req, res) => {
   const sql = 'select geom from geo_table';
-  var on_error = false;
-  try {
-    const tile = await createVectorTile(
-      sql,
-      req.params
-    );
-  } catch {
-    on_error = true;
-  };
-  if (on_error) {
-    res
-      .status(500)
-      .send('Error inside createVectorTile :-(');
-  } else {
-    console.log("AAAAA = " + res.status);
-    console.log("bBBBBB = " + res.setHeader);
+  const tile = await createVectorTile(
+    sql,
+    req.params
+  );
+  if (tile) {
     res.setHeader(
         'Content-Type',
         'application/x-protobuf'
       );
     res.status(200);
     res.send(tile);
+  }
+  else {
+    res
+      .status(500)
+      .send('Error inside createVectorTile :-(');
   };
 });
 
