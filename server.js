@@ -35,18 +35,12 @@ const createVectorTile = (sql,{ x, y, z }) => {
     parseInt(z, 10), parseInt(x, 10), parseInt(y, 10)
   );
   
-  console.log("new mapnik.VectorTile");
-  
   return new Promise((res, rej) => {
     map.render(vector, (err, vectorTile) => {
       if (err) return rej(err);
       
-      console.log("map.render");
-      
       vectorTile.getData((err, buffer) => {
         if (err) return rej(err);
-        
-        console.log("vectorTile.getData");
         
         return res(buffer);
       });
