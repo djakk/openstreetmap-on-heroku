@@ -31,7 +31,7 @@ http {
  	}
 
 	server {
-		listen <%= ENV["PORT"] %>;
+		listen <%= ENV["PORT"] || 80 %>;
 		server_name _;
 		keepalive_timeout 5;
 
