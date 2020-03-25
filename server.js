@@ -47,7 +47,7 @@ const createVectorTile = (sql,{ x, y, z }) => {
 };
 
 
-/*app.get('/:x/:y/:z.mvt', async (req, res) => {
+app.get('/:x/:y/:z.mvt', async (req, res) => {
   const sql = 'select geom from geo_table';
   const tile = await createVectorTile(
     sql,
@@ -58,18 +58,9 @@ const createVectorTile = (sql,{ x, y, z }) => {
       'Content-Type',
       'application/x-protobuf'
     )
-    .status(200).send(tile)
-});*/
-
-app.get('/:x/:y/:z.mvt', async (req, res) => {
-  const sql = 'select geom from geo_table';
-  const tile = await createVectorTile(
-    sql,
-    req.params
-  );
-  res
-    .send('Coucou!');
+    .status(200).send(tile);
 });
+
 
 app.get('/', function (req, res) {
   res.send('Hello World!');
