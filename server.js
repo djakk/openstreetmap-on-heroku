@@ -62,7 +62,7 @@ app.get('/:x/:y/:z.mvt', async (req, res) => {
       .status(200).send(tile);
   } catch {
     res.send('Error inside createVectorTile :-(');
-    
+  };
 });
 
 
