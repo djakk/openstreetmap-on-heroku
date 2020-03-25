@@ -67,7 +67,8 @@ app.get('/:x/:y/:z.mvt', async (req, res) => {
     sql,
     req.params
   );
-  res.send('Coucou!');
+  res
+    .send('Coucou!');
 });
 
 app.get('/', function (req, res) {
