@@ -34,12 +34,20 @@ const createVectorTile = (sql,{ x, y, z }) => {
   const vector = new mapnik.VectorTile(
     z, x, y
   );
-
+  
+  console.log("new mapnik.VectorTile");
+  
   return new Promise((res, rej) => {
     map.render(vector, (err, vectorTile) => {
       if (err) return rej(err);
+      
+      console.log("map.render");
+      
       vectorTile.getData((err, buffer) => {
         if (err) return rej(err);
+        
+        console.log("vectorTile.getData");
+        
         return res(buffer);
       });
     });
@@ -63,6 +71,10 @@ app.get('/:x/:y/:z.mvt', async (req, res) => {
   }
   else {
     res
+      .setHeader(
+          'Content-Type',
+          'text/html'
+        )
       .status(500)
       .send('Error inside createVectorTile :-(');
   };
