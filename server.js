@@ -1,42 +1,16 @@
-var mapnik = require('mapnik');
-var http = require('http');
+const express = require('express');
+const mapnik = require('mapnik');
 
-// register fonts and datasource plugins
+const app = express();
+
 mapnik.register_default_fonts();
 mapnik.register_default_input_plugins();
 
-// parts of code from https://github.com/bensheldon/mapnik-on-heroku <- thanks !
-var port = process.env.PORT || 3000;
-var stylesheet = './stylesheet.xml';
+const proj4 =
+  '+proj=merc +a=6378137 +b=6378137 +lat_ts=0.0 +lon_0=0.0 +x_0=0.0 +y_0=0 +k=1.0 +units=m +nadgrids=@null +wktext +no_defs';
 
-http.createServer(function(req, res) {
-    
-  res.writeHead(500, {'Content-Type': 'text/plain'});
-  
-  try {
-  // map with just a style
-  // eventually the api will support adding styles in javascript (!)
-  var s = '<Map srs="+proj=longlat +ellps=WGS84 +datum=WGS84 +no_defs">';
-  s += '<Style name="points">';
-  s += ' <Rule>';
-  s += '  <PointSymbolizer />';
-  s += ' </Rule>';
-  s += '</Style>';
-  s += '<Style name="lines">';
-  s += ' <Rule>';
-  s += '  <LineSymbolizer stroke="[colour]" />';
-  s += ' </Rule>';
-  s += '</Style>';
-  s += '</Map>';
-  
-  // create map object
-  var map = new mapnik.Map(1024, 1024);
-  map.fromStringSync(s);
-  
-  console.log("creating the map …");
-  
-  the_database_url = new URL(process.env.DATABASE_URL);
-  var options = {
+const the_database_url = new URL(process.env.DATABASE_URL);
+const dbConfig = {
     type: 'postgis',
     host: the_database_url.hostname, 
     port: the_database_url.port, 
@@ -45,32 +19,51 @@ http.createServer(function(req, res) {
     password: the_database_url.password, 
     table: "(SELECT way, 'red' AS colour FROM planet_osm_line) AS roads", 
     geometry_field: 'way'
-  };
-  
-  var the_points_datasource = new mapnik.Datasource(options);
-  var the_points_layer = new mapnik.Layer('points\' layer', "+proj=longlat +ellps=WGS84 +datum=WGS84 +no_defs");
-  the_points_layer.datasource = the_points_datasource;
-  the_points_layer.styles = ['lines', 'points'];
-  map.add_layer(the_points_layer);
-  
-  console.log("creating the image …");
-  map.zoomAll();
-  var the_image__for_the_map = new mapnik.Image(1024, 1024);
-  map.render(the_image__for_the_map, function(err,im) {
-    if (err) {
-      res.end(err.message);
-    } else {
-      im.encode('png', function(err,buffer) {
-        if (err) {
-          res.end(err.message);
-        } else {
-          res.writeHead(200, {'Content-Type': 'image/png'});
-          res.end(buffer);
-        }
+};
+
+
+const createVectorTile = (sql,{ x, y, z }) => {
+  const map = new mapnik.Map(256, 256, proj4);
+  let layer = new mapnik.Layer('tile', proj4);
+  layer.datasource = new mapnik.Datasource(
+    dbConfig
+  );
+  map.add_layer(layer);
+  const vector = new mapnik.VectorTile(
+    z, x, y
+  );
+
+  return new Promise((res, rej) => {
+    map.render(vector, (err, vectorTile) => {
+      if (err) return rej(err);
+      vectorTile.getData((err, buffer) => {
+        if (err) return rej(err);
+        return res(buffer);
       });
-    }
+    });
   });
-  } catch(err2) {
-    res.end(err2.message);
-  };
-}).listen(port);
+};
+
+
+app.get('/:x/:y/:z.mvt', async (req, res) => {
+  const sql = 'select geom from geo_table'
+  const tile = await createVectorTile(
+    sql,
+    req.params
+  );
+  res
+    .setHeader(
+      'Content-Type',
+      'application/x-protobuf'
+    )
+    .status(200).send(tile)
+});
+
+app.get('/', function (req, res) {
+  res.send('Hello World!');
+});
+
+app.listen(3000, function () {
+  console.log('Example app listening on port 3000!');
+});
+
