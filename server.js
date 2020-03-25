@@ -53,10 +53,12 @@ app.get('/:x/:y/:z.mvt', async (req, res) => {
     sql,
     req.params
   );
-  res.setHeader(
+  res
+    .setHeader(
       'Content-Type',
       'application/x-protobuf'
-    ).status(200).send(tile)
+    )
+    .status(200).send(tile)
 });
 
 app.get('/', function (req, res) {
