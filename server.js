@@ -59,16 +59,20 @@ app.get('/:x/:y/:z.mvt', async (req, res) => {
     on_error = true;
   };
   if (on_error) {
-    res
-      .status(500)
-      .send('Error inside createVectorTile :-(');
+    if (res) {
+      res
+        .status(500)
+        .send('Error inside createVectorTile :-(');
+    };
   } else {
-    res
-      .setHeader(
-        'Content-Type',
-        'application/x-protobuf'
-      )
-      .status(200).send(tile);
+    if (res) {
+      res
+        .setHeader(
+          'Content-Type',
+          'application/x-protobuf'
+        )
+        .status(200).send(tile);
+    };
   };
 });
 
