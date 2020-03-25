@@ -30,7 +30,7 @@ const createVectorTile = (sql,{ x, y, z }) => {
   );
   map.add_layer(layer);
   const vector = new mapnik.VectorTile(
-    z, x, y
+    parseInt(z, 10), parseInt(x, 10), parseInt(y, 10)
   );
 
   return new Promise((res, rej) => {
@@ -46,7 +46,7 @@ const createVectorTile = (sql,{ x, y, z }) => {
 
 
 app.get('/:x/:y/:z.mvt', async (req, res) => {
-  const sql = 'select geom from geo_table'
+  const sql = 'select geom from geo_table';
   const tile = await createVectorTile(
     sql,
     req.params
