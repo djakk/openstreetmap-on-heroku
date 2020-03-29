@@ -40,11 +40,15 @@ const createVectorTile = (sql,{ x, y, z }) => {
   );
   map.add_layer(layer);
   
-  const vector = new mapnik.VectorTile(
-    get_an_integer_from_a_string(z, 1), 
-    get_an_integer_from_a_string(x, 1), 
-    get_an_integer_from_a_string(y, 1)
-  );
+  try {
+    const vector = new mapnik.VectorTile(
+      get_an_integer_from_a_string(z, 1), 
+      get_an_integer_from_a_string(x, 1), 
+      get_an_integer_from_a_string(y, 1)
+    );
+  } catch {
+    const vector = new mapnik.VectorTile(1,1,1);
+  };
   
   return new Promise((res, rej) => {
     map.render(vector, (err, vectorTile) => {
