@@ -23,6 +23,14 @@ const dbConfig = {
     geometry_field: 'way'
 };
 
+function get_an_integer_from_a_string(the_string, the_default_integer_value) {
+  var the_integer_value = parseInt(the_string, 10);
+  if isNaN(the_integer_value) {
+    the_integer_value = the_default_integer_value;
+  };
+  return the_integer_value;
+};
+
 // many thanks to https://smallmultiples.com.au/articles/building-large-maps-with-a-node.js-tile-server/ !!
 const createVectorTile = (sql,{ x, y, z }) => {
   const map = new mapnik.Map(256, 256, proj4);
@@ -32,11 +40,10 @@ const createVectorTile = (sql,{ x, y, z }) => {
   );
   map.add_layer(layer);
   
-  /*const vector = new mapnik.VectorTile(
-    parseFloat(z), parseFloat(x), parseFloat(y)
-  );*/
   const vector = new mapnik.VectorTile(
-    14, 5000, 5000
+    get_an_integer_from_a_string(z, 1), 
+    get_an_integer_from_a_string(x, 1), 
+    get_an_integer_from_a_string(y, 1)
   );
   
   return new Promise((res, rej) => {
