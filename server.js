@@ -68,18 +68,24 @@ const createVectorTile = (sql,{ x, y, z }) => {
 app.get('/:x/:y/:z.mvt', async (req, res) => {
   const sql = 'select geom from geo_table';
   try {
-  const tile = await createVectorTile(
-    sql,
-    req.params
-  );
-  res.setHeader(
+    const tile = await createVectorTile(
+      sql,
+      req.params
+    );
+    res.setHeader(
         'Content-Type',
         'application/x-protobuf'
-  );
-  res.status(200);
-  res.send(tile);
+    );
+    res.status(200);
+    res.send(tile);
   } catch (error) {
     console.log("EEEEEEE " + error);
+    res.setHeader(
+        'Content-Type',
+        'text/plain'
+    );
+    res.status(500);
+    res.send("Error with this tile");
   };
 });
 
