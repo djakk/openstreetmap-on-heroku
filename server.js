@@ -80,13 +80,12 @@ app.get('/:x/:y/:z.mvt', async (req, res) => {
     res.send(tile);
   }
   else {
-    res
-      .setHeader(
+    res.setHeader(
           'Content-Type',
           'text/html'
-        )
-      .status(500)
-      .send('Error inside createVectorTile :-(');
+        );
+    res.status(500);
+    res.send('Error inside createVectorTile :-(');
   };
 });
 
