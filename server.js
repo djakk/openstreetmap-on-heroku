@@ -32,7 +32,7 @@ const createVectorTile = (sql,{ x, y, z }) => {
   );
   map.add_layer(layer);
   const vector = new mapnik.VectorTile(
-    parseInt(z, 10), parseInt(x, 10), parseInt(y, 10)
+    parseFloat(z), parseFloat(x), parseFloat(y)
   );
   
   return new Promise((res, rej) => {
