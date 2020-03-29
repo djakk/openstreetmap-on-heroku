@@ -72,15 +72,15 @@ app.get('/:x/:y/:z.mvt', async (req, res) => {
     sql,
     req.params
   );
-  } catch (error) {
-    console.log("EEEEEEE " + error);
-  };
   res.setHeader(
         'Content-Type',
         'application/x-protobuf'
   );
   res.status(200);
   res.send(tile);
+  } catch (error) {
+    console.log("EEEEEEE " + error);
+  };
 });
 
 
