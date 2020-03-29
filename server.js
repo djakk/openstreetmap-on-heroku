@@ -71,22 +71,12 @@ app.get('/:x/:y/:z.mvt', async (req, res) => {
     sql,
     req.params
   );
-  if (tile) {
-    res.setHeader(
+  res.setHeader(
         'Content-Type',
         'application/x-protobuf'
-      );
-    res.status(200);
-    res.send(tile);
-  }
-  else {
-    res.setHeader(
-          'Content-Type',
-          'text/html'
-        );
-    res.status(500);
-    res.send('Error inside createVectorTile :-(');
-  };
+  );
+  res.status(200);
+  res.send(tile);
 });
 
 
