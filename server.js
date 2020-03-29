@@ -70,7 +70,9 @@ app.get('/:x/:y/:z.mvt', async (req, res) => {
   const tile = await createVectorTile(
     sql,
     req.params
-  );
+  ).catch((error) => {
+    console.log("EEEEEEE " + error);
+  });
   res.setHeader(
         'Content-Type',
         'application/x-protobuf'
