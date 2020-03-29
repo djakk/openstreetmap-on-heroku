@@ -65,7 +65,9 @@ app.get('/:x/:y/:z.mvt', async (req, res) => {
   const tile = await createVectorTile(
     sql,
     req.params
-  );
+  ).catch(function(error) {
+      console.error(error);
+  });
   if (tile) {
     res.setHeader(
         'Content-Type',
