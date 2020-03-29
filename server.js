@@ -44,9 +44,7 @@ const createVectorTile = (sql,{ x, y, z }) => {
     get_an_integer_from_a_string(z, 1), 
     get_an_integer_from_a_string(x, 1), 
     get_an_integer_from_a_string(y, 1)
-  ).catch(function(error) {
-      console.error("AAAAA " + error);
-  });  
+  ); 
   
   return new Promise((res, rej) => {
     map.render(vector, (err, vectorTile) => {
@@ -72,9 +70,7 @@ app.get('/:x/:y/:z.mvt', async (req, res) => {
   const tile = await createVectorTile(
     sql,
     req.params
-  ).catch(function(error) {
-      console.error("BBBBB " + error);
-  });
+  );
   if (tile) {
     res.setHeader(
         'Content-Type',
