@@ -36,7 +36,7 @@ const createVectorTile = (sql,{ x, y, z }) => {
       parseFloat(z), parseFloat(x), parseFloat(y)
     );
   } catch {
-    return;
+    const vector = void;
   };
   
   return new Promise((res, rej) => {
