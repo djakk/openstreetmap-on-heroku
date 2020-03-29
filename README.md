@@ -29,4 +29,4 @@ Reminder : looking at the logs :
 heroku logs --tail --app openstreetmap-on-heroku
 
 
-Get an (empty) tile : https://openstreetmap-on-heroku.herokuapp.com/1/0/0.mvt
+Get an (empty) tile : https://openstreetmap-on-heroku.herokuapp.com/1/1/1.mvt
