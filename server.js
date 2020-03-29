@@ -25,7 +25,7 @@ const dbConfig = {
 
 function get_an_integer_from_a_string(the_string, the_default_integer_value) {
   var the_integer_value = parseInt(the_string, 10);
-  if isNaN(the_integer_value) {
+  if (isNaN(the_integer_value)) {
     the_integer_value = the_default_integer_value;
   };
   return the_integer_value;
