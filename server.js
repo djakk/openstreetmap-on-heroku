@@ -36,7 +36,7 @@ const createVectorTile = (sql,{ x, y, z }) => {
     parseFloat(z), parseFloat(x), parseFloat(y)
   );*/
   const vector = new mapnik.VectorTile(
-    14, -1.5, 48.5
+    14, 5000, 5000
   );
   
   return new Promise((res, rej) => {
