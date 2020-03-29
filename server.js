@@ -65,7 +65,7 @@ const createVectorTile = (sql,{ x, y, z }) => {
 };
 
 
-app.get('/:x/:y/:z.mvt', (async (req, res) => {
+app.get('/:x/:y/:z.mvt', (async function(req, res) {
   const sql = 'select geom from geo_table';
   const tile = await createVectorTile(
     sql,
