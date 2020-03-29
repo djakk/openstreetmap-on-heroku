@@ -30,3 +30,4 @@ heroku logs --tail --app openstreetmap-on-heroku
 
 
 Get an (empty) tile : https://openstreetmap-on-heroku.herokuapp.com/1/1/1.mvt
+Get an error with a bad request : https://openstreetmap-on-heroku.herokuapp.com/1/30000/1.mvt
