@@ -27,3 +27,6 @@ osm2pgsql -c -d DATABASE_NAME --slim map.osm --style default.style -H DATABASE_H
 
 Reminder : looking at the logs : 
 heroku logs --tail --app openstreetmap-on-heroku
+
+
+Get a tile : https://openstreetmap-on-heroku.herokuapp.com/14/48/1.mvt
