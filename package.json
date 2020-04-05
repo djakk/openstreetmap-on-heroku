@@ -2,6 +2,7 @@
   "name" : "openstreetmap-on-heroku", 
   "dependencies": {
       "mapnik": "*", 
-      "express" : "*"
+      "express" : "*", 
+      "leaflet.vectorgrid" : "*"
   }
 }
