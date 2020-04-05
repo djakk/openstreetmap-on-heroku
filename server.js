@@ -24,10 +24,10 @@ const dbConfig = {
     geometry_field: 'way'
 };
 
-function get_an_integer_from_a_string(the_string, the_default_integer_value) {
+function get_an_integer_from_a_string(the_string) {
   var the_integer_value = parseInt(the_string, 10);
   if (isNaN(the_integer_value)) {
-    the_integer_value = the_default_integer_value;
+    throw "bad int";
   };
   return the_integer_value;
 };
@@ -42,9 +42,9 @@ const createVectorTile = (sql,{ x, y, z }) => {
   map.add_layer(layer);
   
   const vector = new mapnik.VectorTile(
-    get_an_integer_from_a_string(z, 1), 
-    get_an_integer_from_a_string(x, 1), 
-    get_an_integer_from_a_string(y, 1)
+    get_an_integer_from_a_string(z), 
+    get_an_integer_from_a_string(x), 
+    get_an_integer_from_a_string(y)
   ); 
   
   return new Promise((res, rej) => {
