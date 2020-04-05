@@ -39,6 +39,7 @@ const createVectorTile = (sql,{ x, y, z }) => {
   layer.datasource = new mapnik.Datasource(
     dbConfig
   );
+  layer.styles = ['line'];
   map.add_layer(layer);
   
   const vector = new mapnik.VectorTile(
