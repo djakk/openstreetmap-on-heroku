@@ -19,7 +19,7 @@ const dbConfig = {
     dbname: the_database_url.pathname.substring(1), 
     user: the_database_url.username,
     password: the_database_url.password, 
-    table: '(SELECT way, \'red\' AS colour FROM planet_osm_line) AS planet_osm_line', 
+    table: '(SELECT way FROM planet_osm_line) AS planet_osm_line', 
     //table: "(SELECT way FROM planet_osm_line) AS planet_osm_line", 
     geometry_field: 'way'
 };
@@ -43,7 +43,7 @@ const createVectorTile = (sql,{ x, y, z }) => {
   s += '</Style>';
   s += '<Style name="lines">';
   s += ' <Rule>';
-  s += '  <LineSymbolizer stroke="[colour]" />';
+  s += '  <LineSymbolizer />';
   s += ' </Rule>';
   s += '</Style>';
   s += '</Map>';
