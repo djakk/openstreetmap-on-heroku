@@ -60,7 +60,7 @@ const createVectorTile = (sql,{ x, y, z }) => {
       console.log("NNNNN2 " + vectorTile.getData());
     });
   }).then((state) => {
-    console.log("KKKKKKK " + vector);
+    console.log("KKKKKKK " + vector.getData().length);
   })
   .catch((error) => {
     console.log("RRRRRRR " + error);
