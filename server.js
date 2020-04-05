@@ -49,10 +49,16 @@ const createVectorTile = (sql,{ x, y, z }) => {
   
   return new Promise((res, rej) => {
     map.render(vector, (err, vectorTile) => {
-      if (err) return rej(err);
+      if (err) {
+        console.log("EEERRR " + err);
+        return rej(err);
+      };
       
       vectorTile.getData((err, buffer) => {
-        if (err) return rej(err);
+        if (err) {
+          console.log("EEERRR2 " + err);
+          return rej(err);
+        };
         console.log("MMMMMM " + buffer);
         return res(buffer);
       });
@@ -76,6 +82,7 @@ app.get('/:z/:x/:y.mvt', async (req, res) => {
       req.params
     );
     console.log("FFFFFF " + tile);
+    console.log("FFFFF2 " + req.params);
     res.setHeader(
         'Content-Type',
         'application/x-protobuf'
