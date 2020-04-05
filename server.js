@@ -85,7 +85,9 @@ const createVectorTile = (sql,{ x, y, z }) => {
       console.log("NNNNN2 " + vectorTile.getData());
     });
   }).then((state) => {
-    console.log("KKKKKKK " + vector.toJSON());
+    console.log("KKKKKKK ");
+    var the_json = vector.toJSON();
+    console.log(the_json);
   })
   .catch((error) => {
     console.log("RRRRRRR " + error);
