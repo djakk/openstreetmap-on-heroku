@@ -29,6 +29,7 @@ function get_an_integer_from_a_string(the_string) {
   if (isNaN(the_integer_value)) {
     throw "bad int";
   };
+  console.log("ININININI ", the_string, the_integer_value);
   return the_integer_value;
 };
 
