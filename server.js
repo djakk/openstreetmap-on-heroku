@@ -63,6 +63,7 @@ const createVectorTile = (sql,{ x, y, z }) => {
     get_an_integer_from_a_string(x), 
     get_an_integer_from_a_string(y)
   ); 
+  console.log("VVVVVV " + vector);
   
   return new Promise((res, rej) => {
     map.render(vector, (err, vectorTile) => {
