@@ -72,16 +72,21 @@ app.get('/:z/:x/:y.mvt', async (req, res) => {
       sql,
       req.params
     );
+    console.log("FFFFFF " + tile);
     res.setHeader(
         'Content-Type',
         'application/x-protobuf'
-    ).status(200).send(tile);
+    );
+    res.status(200);
+    res.send(tile);
   } catch (error) {
     console.log("EEEEEEE " + error);
     res.setHeader(
         'Content-Type',
         'text/plain'
-    ).status(500).send("Error with this tile");
+    );
+    res.status(500);
+    res.send("Error with this tile");
   };
 });
 
