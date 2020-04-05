@@ -92,7 +92,7 @@ const createVectorTile = (sql,{ x, y, z }) => {
   });
 };
 
-/*
+
 app.get('/:z/:x/:y.mvt', async (req, res) => {
   const sql = 'select geom from geo_table';
   try {
@@ -118,7 +118,7 @@ app.get('/:z/:x/:y.mvt', async (req, res) => {
     res.send("Error with this tile");
   };
 });
-*/
+/*
 app.get('/:z/:x/:y.mvt', async (req, res) => {
   const sql = 'select geom from geo_table';
   const tile = await createVectorTile(
@@ -134,6 +134,7 @@ app.get('/:z/:x/:y.mvt', async (req, res) => {
   )
     .status(200).send(tile);
 });
+*/
 
 app.get('/', function (req, res) {
   res.send('Hello World!');
