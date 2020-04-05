@@ -59,13 +59,12 @@ const createVectorTile = (sql,{ x, y, z }) => {
       console.log("NNNNNN " + vectorTile.getData().length);
       console.log("NNNNN2 " + vectorTile.getData());
     });
-  });
-  /*}).then((state) => {
-    console.log("KKKKKKK " + state);
+  }).then((state) => {
+    console.log("KKKKKKK " + vector);
   })
   .catch((error) => {
     console.log("RRRRRRR " + error);
-  });*/
+  });
 };
 
 
