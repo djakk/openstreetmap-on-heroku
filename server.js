@@ -39,8 +39,22 @@ const createVectorTile = (sql,{ x, y, z }) => {
   layer.datasource = new mapnik.Datasource(
     dbConfig
   );
-  layer.styles = ['line'];
+  //layer.styles = ['line'];
   map.add_layer(layer);
+  
+  var s = '<Map srs="+proj=merc +a=6378137 +b=6378137 +lat_ts=0.0 +lon_0=0.0 +x_0=0.0 +y_0=0 +k=1.0 +units=m +nadgrids=@null +wktext +no_defs">';
+  s += '<Style name="points">';
+  s += ' <Rule>';
+  s += '  <PointSymbolizer />';
+  s += ' </Rule>';
+  s += '</Style>';
+  s += '<Style name="lines">';
+  s += ' <Rule>';
+  s += '  <LineSymbolizer stroke="[colour]" />';
+  s += ' </Rule>';
+  s += '</Style>';
+  s += '</Map>';
+  map.fromStringSync(s);
   
   const vector = new mapnik.VectorTile(
     get_an_integer_from_a_string(z), 
