@@ -19,8 +19,7 @@ const dbConfig = {
     dbname: the_database_url.pathname.substring(1), 
     user: the_database_url.username,
     password: the_database_url.password, 
-    table: "(SELECT way, 'red' AS colour FROM planet_osm_line) AS tile", 
-    geometry_field: 'way'
+    table: "(SELECT way, 'red' AS colour FROM planet_osm_line) AS tile"
 };
 
 function get_an_integer_from_a_string(the_string, the_default_integer_value) {
