@@ -55,7 +55,9 @@ const createVectorTile = (sql,{ x, y, z }) => {
   );
   layer.styles = ['lines'];
   map.add_layer(layer);
-
+  console.log("XXXXXXXXXX");
+  console.log(map.toXML());
+  
   const vector = new mapnik.VectorTile(
     get_an_integer_from_a_string(z), 
     get_an_integer_from_a_string(x), 
