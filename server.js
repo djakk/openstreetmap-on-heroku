@@ -19,7 +19,8 @@ const dbConfig = {
     dbname: the_database_url.pathname.substring(1), 
     user: the_database_url.username,
     password: the_database_url.password, 
-    table: "(SELECT way, 'red' AS colour FROM planet_osm_line) AS road", 
+    //table: "(SELECT way, 'red' AS colour FROM planet_osm_line) AS road", 
+    table: "planet_osm_line", 
     geometry_field: 'way'
 };
 
