@@ -34,14 +34,7 @@ function get_an_integer_from_a_string(the_string) {
 
 // many thanks to https://smallmultiples.com.au/articles/building-large-maps-with-a-node.js-tile-server/ !!
 const createVectorTile = (sql,{ x, y, z }) => {
-  const map = new mapnik.Map(256, 256, proj4);
-  let layer = new mapnik.Layer('planet_osm_line', proj4);
-  layer.datasource = new mapnik.Datasource(
-    dbConfig
-  );
-  //layer.styles = ['line'];
-  map.add_layer(layer);
-  
+  const map = new mapnik.Map(256, 256, proj4);  
   var s = '<Map srs="+proj=merc +a=6378137 +b=6378137 +lat_ts=0.0 +lon_0=0.0 +x_0=0.0 +y_0=0 +k=1.0 +units=m +nadgrids=@null +wktext +no_defs">';
   s += '<Style name="points">';
   s += ' <Rule>';
@@ -56,6 +49,13 @@ const createVectorTile = (sql,{ x, y, z }) => {
   s += '</Map>';
   map.fromStringSync(s);
   
+  let layer = new mapnik.Layer('planet_osm_line', proj4);
+  layer.datasource = new mapnik.Datasource(
+    dbConfig
+  );
+  layer.styles = ['lines'];
+  map.add_layer(layer);
+
   const vector = new mapnik.VectorTile(
     get_an_integer_from_a_string(z), 
     get_an_integer_from_a_string(x), 
