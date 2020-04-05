@@ -71,7 +71,7 @@ var vectorTileStyling = {
 		fillOpacity: 0.2,
 		opacity: 0.4
 	},
-	road: {	// mapbox & nextzen only
+	planet_osm_line: {	// mapbox & nextzen only
 		weight: 1,
 		fillColor: '#f2b648',
 		color: '#f2b648',
