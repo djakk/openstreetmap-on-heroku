@@ -13,12 +13,18 @@ L.marker([51.5, -0.09]).addTo(map)
 
 var vectorTileStyling = {
 
-	24: {	// mapbox & nextzen only
+	my_lines: {	// mapbox & nextzen only
 		weight: 1,
 		fillColor: '#f2b648',
 		color: '#f2b648',
 		fillOpacity: 0.2,
-		opacity: 0.4
+		opacity: 0.4, 
+	     fill: true,
+	     fillColor: 'green',
+	     fillOpacity: 0.25,
+	     stroke: true,
+	     color: 'green',
+	     weight: 1
 	}
 };
 
