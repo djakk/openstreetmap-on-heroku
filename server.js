@@ -76,7 +76,8 @@ const createVectorTile = (sql,{ x, y, z }) => {
         return res(buffer);
       });
     });
-  }).then((state) => {
+  });
+   /* .then((state) => {
     console.log("KKKKKKK ");
     console.log(vector.z, vector.x, vector.y);
     var the_json = vector.toJSON();
@@ -85,7 +86,7 @@ const createVectorTile = (sql,{ x, y, z }) => {
   })
   .catch((error) => {
     console.log("RRRRRRR " + error);
-  });
+  });*/
 };
 
 
