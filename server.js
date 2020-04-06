@@ -101,6 +101,8 @@ app.get('/:z/:x/:y.mvt', async (req, res) => {
     );
     res.status(200);
     res.send(tile);
+    console.log("SSSSSSS " + res);
+    console.log("------- " + tile);
   } catch (error) {
     res.setHeader(
         'Content-Type',
