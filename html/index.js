@@ -13,7 +13,7 @@ L.marker([51.5, -0.09]).addTo(map)
 
 var vectorTileStyling = {
 
-	my_lines: {	// mapbox & nextzen only
+	my_lines_OLD: {	// mapbox & nextzen only
 		weight: 1,
 		fillColor: '#f2b648',
 		color: '#f2b648',
@@ -25,7 +25,34 @@ var vectorTileStyling = {
 	     stroke: true,
 	     color: 'green',
 	     weight: 1
-	}
+	}, 
+        my_lines: function(properties, zoom, geometryDimension) {
+	    if (geometryDimension === 1) {   // point
+	        return ({
+                    radius: 5,
+                    color: '#cf52d3',
+                });
+	    }
+	    
+	    if (geometryDimension === 2) {   // line
+                 return ({
+                    weight: 1,
+                    color: '#cf52d3',
+                    dashArray: '2, 6',
+                    fillOpacity: 0
+                });
+	    }
+	    
+	    if (geometryDimension === 3) {   // polygon
+	         return ({
+                    weight: 1,
+                    fillColor: '#9bc2c4',
+                    fillOpacity: 1,
+                    fill: true
+                });
+	    }
+        }
+
 };
 
 
