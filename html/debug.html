@@ -1,0 +1,431 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>MVT OL Debug</title>
+		<script src="https://cdn.rawgit.com/openlayers/openlayers.github.io/master/en/v5.3.0/build/ol.js"></script>
+		<link rel="stylesheet" href="https://cdn.rawgit.com/openlayers/openlayers.github.io/master/en/v5.3.0/css/ol.css">
+		<style>
+			*{padding:0;margin:0;}
+			body{font-family:Verdana,sans-serif;}
+			.map {
+				width:100%;
+				height: 100%;
+				position: absolute;
+				background: #f8f4f0;
+			}
+			#stats{position:absolute;bottom:0;right:0;left:0;z-index:2000;background-color:rgba(230,230,230,0.9);padding:10px;
+				line-height:30px;font-size:16px;}
+			#stats input{line-height:24px;font-size:14px;padding:0 4px;}
+			#stats button{line-height:24px;font-size:14px;padding:0 4px;float:right;background-color:rgb(34,94,168);border:1px solid rgb(37,52,148);cursor:pointer;color:#fff;margin-top:3px;}
+			#stats button:hover{background-color:rgb(37,52,148);}
+			#stats span{position:relative;}
+			.source{position:absolute;bottom:38px;left:0;right:6px;background-color:rgba(250,250,250,0.9);}
+			.featureLayer{overflow:hidden;line-height:16px;cursor:pointer;display:none;}
+			#stats .featureLayer{display:block;}
+			.featureLayer:hover{background-color:#fff;}
+			.featureLayer .colorBox{width:14px;height:14px;display:inline-block;margin:3px 4px 0 4px;}
+			.featureLayer span{line-height:16px;font-size:12px;}
+			a{text-decoration:none;}
+		</style>
+	</head>
+	<body id="body">
+		<form id="stats">
+			<span>
+				<div id="source1" class="source">
+				</div>
+				<a id="sourceLink1" href="javascript:">S1:</a>
+				<input id="sourceInp1" type="text" name="source1" class=""/>
+			</span>
+			<span>
+				<div id="source2" class="source">
+				</div>
+				<a id="sourceLink2" href="javascript:">S2:</a>
+				<input id="sourceInp2" type="text" name="source2" class=""/>
+			</span>
+			<span>
+				<label>X:</label>
+				<input id="centerInpX" name="centerX"/>
+			</span>
+			<span>
+				<label>Y:</label>
+				<input id="centerInpY" name="centerY"/>
+			</span>
+			<span>
+				<label>Zoom:</label>
+				<input id="zoomInp" name="zoom" size="2"/>
+				<button>Go</button>
+			</span>
+		</form>
+
+		<div id="featureLayerTpl" class="featureLayer">
+			<div class="colorBox"></div>
+			<span class="label"></span>
+		</div>
+
+		<div id="map" class="map"></div>
+	</body>
+	<script type="text/javascript">
+
+		(function(){
+
+			var config = {
+				centerX:-187826.04, 
+				centerY:6126568.36, // these values will center on Bonn, Germany
+				zoom:14, // initial zoom level 1 for the furthest out and 20 for very zoomed in
+				source2:'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
+				source1:'https://openstreetmap-on-heroku.herokuapp.com/{z}/{x}/{y}.mvt'
+			};
+
+			//get url vars
+			var uriVars = function(str){
+				var vars = {};
+				str = str || window.location.href;
+			    var hashes = str.slice(str.indexOf('?') + 1).split('&');
+			    for(var i=0,len=hashes.length;i<len;i++){
+			        var hash = hashes[i].split('=');
+			        vars[hash[0]] = decodeURIComponent(hash[1]);
+			    }
+			    return vars;
+			};
+
+			var qry = uriVars();
+
+			qry.source1 = (qry.source1 !== undefined)? qry.source1 : config.source1;
+			qry.source2 = (qry.source2 !== undefined)? qry.source2 : config.source2;
+			qry.centerX = qry.centerX || config.centerX;
+			qry.centerY = qry.centerY || config.centerY;
+			qry.zoom = qry.zoom || config.zoom;
+
+			var sourceInp1 = document.getElementById('sourceInp1');
+			var sourceInp2 = document.getElementById('sourceInp2');
+			var centerInpX = document.getElementById('centerInpX');
+			var centerInpY = document.getElementById('centerInpY');
+			var zoomInp = document.getElementById('zoomInp');
+
+			sourceInp1.value = qry.source1;
+			sourceInp2.value = qry.source2;
+			centerInpX.value = qry.centerX;
+			centerInpY.value = qry.centerY;
+			zoomInp.value = qry.zoom;
+
+			// colors from http://colorbrewer2.org/
+			var colors = {
+				greenBlue:[[247,252,253],[229,245,249],[204,236,230],[153,216,201],[102,194,164],[65,174,118],[35,139,69],[0,109,44],[0,68,27]],
+				redPink:[[255,247,236],[254,232,200],[253,212,158],[253,187,132],[252,141,89],[239,101,72],[215,48,31],[179,0,0],[127,0,0]],
+				blue:[[255,255,217],[237,248,177],[199,233,180],[127,205,187],[65,182,196],[29,145,192],[34,94,168],[37,52,148],[8,29,88]],
+				brown:[[255,245,235],[254,230,206],[253,208,162],[253,174,107],[253,141,60],[241,105,19],[217,72,1],[166,54,3],[127,39,4]],
+				green:[[247,252,245],[229,245,224],[199,233,192],[161,217,155],[116,196,118],[65,171,93],[35,139,69],[0,109,44],[0,68,27]],
+				purple:[[252,251,253],[239,237,245],[218,218,235],[188,189,220],[158,154,200],[128,125,186],[106,81,163],[84,39,143],[63,0,125]],
+				gray:[[255,255,255],[240,240,240],[217,217,217],[189,189,189],[150,150,150],[115,115,115],[82,82,82],[37,37,37],[0,0,0]],
+				purplePink:[[255,247,243],[253,224,221],[252,197,192],[250,159,181],[247,104,161],[221,52,151],[174,1,126],[122,1,119],[73,0,106]],
+				red:[[255,245,240],[254,224,210],[252,187,161],[252,146,114],[251,106,74],[239,59,44],[203,24,29],[165,15,21],[103,0,13]]
+			};
+
+			var stylesBase = {
+				building:{fillColor:colors.gray[5]},
+				debug:{strokeColor:colors.red[5],strokeWidth:1},
+				farms:{fillColor:colors.green[3]},
+				forest:{fillColor:colors.green[5]},
+				grassland:{fillColor:colors.green[2]},
+				lakes:{fillColor:colors.blue[5]},
+				landuse:{fillColor:colors.gray[4].concat(0.3)},
+				medical:{fillColor:colors.red[5]},
+				military:{fillColor:colors.purplePink[5]},
+				main_roads:{strokeColor:colors.purple[7],strokeWidth:2.5},
+				residential:{fillColor:colors.red[4]},
+				river:{fillColor:colors.blue[5]},
+				road:{strokeColor:colors.purple[5],strokeWidth:1.5},
+				sand:{fillColor:colors.brown[6]},
+				schools:{fillColor:colors.red[6]},
+				water:{fillColor:colors.blue[5]},
+				waterway:{fillColor:colors.blue[5]},
+				
+				alt1:{fillColor:colors.purplePink[3],strokeColor:colors.purplePink[4],strokeWidth:1},
+				alt2:{fillColor:colors.greenBlue[3],strokeColor:colors.greenBlue[4],strokeWidth:1},
+				alt3:{fillColor:colors.redPink[3],strokeColor:colors.redPink[4],strokeWidth:1},
+				alt4:{fillColor:colors.gray[3],strokeColor:colors.gray[4],strokeWidth:1},
+				alt5:{fillColor:colors.green[3],strokeColor:colors.green[4],strokeWidth:1},
+			};
+
+			var layers = [{},{}];
+
+			var styles = {};
+			var stylesInit = function(){
+				for (var i in stylesBase){
+					var style = stylesBase[i];
+					styles[i] = styleGet(style);
+				}
+			};
+
+			/*
+			styleGet (fun): turns a simple style definition into an ol style
+				style (obj):
+					fillColor (ary): [r,g,b,a]
+					strokeColor (ary): [r,g,b,a]
+					strokeWidth (num): 
+			*/
+			var styleGet = function(style){
+				var styleOL = {};
+				if (style.fillColor){
+					styleOL.fill = new ol.style.Fill({color:style.fillColor});
+				}
+				if (style.strokeColor){
+					var stroke = {color:style.strokeColor};
+					if (style.strokeWidth) stroke.width = stroke.strokeWidth;
+					styleOL.stroke = new ol.style.Stroke(stroke);
+				}
+				return new ol.style.Style(styleOL);
+			};
+
+			/*
+			formBuild (fun): builds OL layer controllers
+			*/
+			var formBuild = function(){
+				var input = document.createElement('input');
+				input.setAttribute('type','text');
+				input.style.zIndex = 2000;
+				document.getElementById('body').appendChild(input);
+			};
+
+			formBuild();
+
+			/*
+			controllersBuild (fun): builds OL layer controllers
+			*/
+			var controllersBuild = function(){
+
+				for (var i=0,len=2;i<len;i++){
+					var layer = layers[i];
+
+					var conDiv = document.getElementById('source'+(i+1));
+					layers[i].controllerDiv = conDiv;
+					layers[i].visible = true;
+					conDiv.addEventListener('click',function(event){
+						var target = event.target || event.srcElement;
+						if (target.className.indexOf('featureLayer') === -1){
+							var parent = target.parentNode;
+							if (parent.className.indexOf('featureLayer') !== -1){
+								target = parent;
+							} else {
+								return;
+							}
+						}
+						var name = target.getAttribute('name');
+						var layerInd = target.getAttribute('layerInd');
+						var colorBox = target.getElementsByClassName('colorBox')[0];
+						if (layers[layerInd].featureLayers[name].render){
+							layers[layerInd].featureLayers[name].render = false;
+							colorBox.style.backgroundColor = '#fff';
+						} else {
+							layers[layerInd].featureLayers[name].render = true;
+							var color = target.getAttribute('bgColor');
+							colorBox.style.backgroundColor = color;
+						}
+						layers[layerInd].layerOL.changed(); //trigger rerender
+					});
+				}
+			};
+
+			var featureLayerTpl = document.getElementById('featureLayerTpl');
+
+			/*
+			featureLayerBuild (fun): 
+				featureLayer (obj):
+					layerInd (num): index of layer in the layers array
+					name (str): the name of the featureLayer
+			*/
+			var alt = 1; //tracks the alternate colors used (for variance)
+			var featureLayerBuild = function(featureLayer){
+				if (!layers[featureLayer.layerInd].featureLayers) 
+					layers[featureLayer.layerInd].featureLayers = {};
+
+				if (!layers[featureLayer.layerInd].featureLayers[featureLayer.name] || !layers[featureLayer.layerInd].featureLayers[featureLayer.name].built){
+					var featureDiv = featureLayerTpl.cloneNode(true);
+
+					var nameSpan = featureDiv.getElementsByTagName('SPAN')[0];
+
+					//console.log('featureDiv:',featureDiv);
+
+					nameSpan.innerHTML = featureLayer.name;
+
+  					featureDiv.setAttribute('name',featureLayer.name);
+  					featureDiv.setAttribute('layerInd',featureLayer.layerInd);
+
+					if (!stylesBase[featureLayer.name]){ // use alternate style
+						styles[featureLayer.name] = styles['alt'+alt];
+						stylesBase[featureLayer.name] = stylesBase['alt'+alt];
+						alt++;
+						if (alt > 5) alt = 1;
+					}
+
+					layers[featureLayer.layerInd].featureLayers[featureLayer.name] = layers[featureLayer.layerInd].featureLayers[featureLayer.name] || {};
+					if (layers[featureLayer.layerInd].featureLayers[featureLayer.name].render === undefined)
+						layers[featureLayer.layerInd].featureLayers[featureLayer.name].render = true;
+					layers[featureLayer.layerInd].featureLayers[featureLayer.name].built = true;
+
+					if (stylesBase[featureLayer.name]){
+						var color = stylesBase[featureLayer.name].fillColor || stylesBase[featureLayer.name].strokeColor;
+						//console.log('color:',color);
+						if (color){
+							var colorStr = 'rgb('+color[0]+','+color[1]+','+color[2]+')';
+
+							var colorBox = featureDiv.getElementsByTagName('DIV')[0];
+							//console.log('colorBox:',colorBox)
+
+							
+							featureDiv.setAttribute('bgColor',colorStr);
+
+							if (layers[featureLayer.layerInd].featureLayers[featureLayer.name].render){
+								colorBox.style.backgroundColor = colorStr;
+								colorBox.style.color = '#fff';
+							} else {
+								colorBox.style.backgroundColor = '#fff';
+								colorBox.style.color = '#333';
+							}
+							layers[featureLayer.layerInd].controllerDiv.appendChild(featureDiv);
+						}
+
+					}
+				}
+			};
+
+			/*
+			featureLayersReset (fun): resets the feature layers so that the legend can be rebuilt
+
+			*/
+			var featureLayersReset = function(){
+				for (var i=0,len=layers.length;i<len;i++){
+					for (var j in layers[i].featureLayers){
+						layers[i].featureLayers[j].built = false;
+					}
+					layers[i].controllerDiv.innerHTML = '';
+				}
+			};
+
+			var statBind = function(){
+				map.on('moveend',function(){
+					var center = map.getView().getCenter();
+					var zoom = map.getView().getZoom();
+					//console.log('mao view:',map.getView().getCenter());
+
+					centerInpX.value = center[0];
+					centerInpY.value = center[1];
+					zoomInp.value = zoom;
+				});
+				stats.addEventListener('click',function(event){
+					var target = event.target || event.srcElement;
+					if (target.tagName == 'INPUT'){
+						setTimeout(function(){
+							target.select();
+						},1);
+					}
+				});
+
+				stats.addEventListener('keyup',function(event){
+					var target = event.target || event.srcElement;
+
+					if (target.tagName == 'INPUT'){
+						if (event.keyCode == 13){ //enter
+
+						}
+					}
+				});
+			};
+
+
+			/*
+			style (fun): builds OL layer controllers
+				ind (num): index of layer in layers
+			*/
+			var curResolution;
+			var style = function(ind){
+				return function(feature,resolution){
+					if (resolution !== curResolution){
+						featureLayersReset();
+						curResolution = resolution;
+					}
+					var featureLayerStyles = [];
+					var name = feature.get('layer');
+					var type = feature.get('type');
+
+					featureLayerBuild({
+						layerInd:ind,
+						name:name
+					});
+
+					if (layers[ind].featureLayers[name].render){
+						if (styles[name]) featureLayerStyles.push(styles[name]);
+					}
+					return featureLayerStyles;
+				};
+			};
+
+			stylesInit();
+
+			var layersOL = [];
+			for (var i=0,len=2;i<len;i++){
+				if (qry['source'+(i+1)]){
+					//console.log('source'+i);
+					var layer = new ol.layer.VectorTile({
+						source: new ol.source.VectorTile({
+							attributions: '© <a href="https://www.mapbox.com/map-feedback/">Mapbox</a> ' +
+							'© <a href="http://www.openstreetmap.org/copyright">' +
+							'OpenStreetMap contributors</a>',
+							format: new ol.format.MVT(),
+							tileGrid: ol.tilegrid.createXYZ({maxZoom: 22}),
+							tilePixelRatio: 16,
+							url:qry['source'+(i+1)]
+						}),
+						style:style(i)
+					});
+					layersOL.push(layer);
+					layers[i] = {layerOL:layer};
+				}
+			}
+
+			document.getElementById('sourceLink1').addEventListener('click',function(){
+				if (layers[0] && layers[0].layerOL){
+					if (layers[0].visible){
+						layers[0].layerOL.setVisible(false);
+						layers[0].visible = false;
+						layers[0].controllerDiv.style.display = 'none';
+					} else {
+						layers[0].layerOL.setVisible(true);
+						layers[0].visible = true;
+						layers[0].controllerDiv.style.display = 'block';
+					}
+				}
+			});
+
+			document.getElementById('sourceLink2').addEventListener('click',function(){
+				if (layers[1] && layers[1].layerOL){
+					if (layers[1].visible){
+						layers[1].layerOL.setVisible(false);
+						layers[1].visible = false;
+						layers[1].controllerDiv.style.display = 'none';
+					} else {
+						layers[1].layerOL.setVisible(true);
+						layers[1].visible = true;
+						layers[1].controllerDiv.style.display = 'block';
+					}
+				}
+			});
+
+
+			//layer.setVisible(false);
+
+			var map = new ol.Map({
+				layers:layersOL,
+				target:'map',
+				view:new ol.View({
+					center:[Number(qry.centerX),Number(qry.centerY)],
+					zoom:Number(qry.zoom)
+				})
+			});
+
+			controllersBuild();
+
+			statBind();
+		})();
+	</script>
+</html>
