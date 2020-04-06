@@ -37,7 +37,7 @@ var mapboxVectorTileOptions = {
 			rendererFactory: L.svg.tile,
 			attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors, &copy; <a href="https://www.mapbox.com/about/maps/">MapBox</a>', 
 			vectorTileLayerStyles: vectorTileStyling, 
-	                interactive: true, pane: 'OverlayPane'
+	                interactive: true
 };
 var mapboxPbfLayer = L.vectorGrid.protobuf(mapboxUrl, mapboxVectorTileOptions).on('click',function(e) {
     console.log(e.layer);
