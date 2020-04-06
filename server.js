@@ -19,7 +19,7 @@ const dbConfig = {
     dbname: the_database_url.pathname.substring(1), 
     user: the_database_url.username,
     password: the_database_url.password, 
-    table: '(SELECT way FROM planet_osm_line) AS planet_osm_line', 
+    table: '(SELECT way FROM planet_osm_line) AS my_lines', 
     //table: "(SELECT way FROM planet_osm_line) AS planet_osm_line", 
     geometry_field: 'way'
 };
@@ -49,11 +49,11 @@ const createVectorTile = (sql,{ x, y, z }) => {
   s += '</Map>';
   map.fromStringSync(s);
   
-  let layer = new mapnik.Layer('planet_osm_line', proj4);
+  let layer = new mapnik.Layer('my_lines', proj4);
   layer.datasource = new mapnik.Datasource(
     dbConfig
   );
-  layer.styles = ['lines'];
+  layer.styles = ['points', 'lines'];
   map.add_layer(layer);
   
   const vector = new mapnik.VectorTile(
