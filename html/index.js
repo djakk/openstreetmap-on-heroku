@@ -11,28 +11,7 @@ L.marker([51.5, -0.09]).addTo(map)
 
 var vectorTileStyling = {
 
-	planet_osm_line: {	// mapbox & nextzen only
-		weight: 1,
-		fillColor: '#f2b648',
-		color: '#f2b648',
-		fillOpacity: 0.2,
-		opacity: 0.4
-	}, 
-	tile: {	// mapbox & nextzen only
-		weight: 1,
-		fillColor: '#f2b648',
-		color: '#f2b648',
-		fillOpacity: 0.2,
-		opacity: 0.4
-	}, 
-	line: {	// mapbox & nextzen only
-		weight: 1,
-		fillColor: '#f2b648',
-		color: '#f2b648',
-		fillOpacity: 0.2,
-		opacity: 0.4
-	}, 
-	lines: {	// mapbox & nextzen only
+	my_lines: {	// mapbox & nextzen only
 		weight: 1,
 		fillColor: '#f2b648',
 		color: '#f2b648',
