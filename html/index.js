@@ -25,8 +25,9 @@ var vectorTileStyling = {
 
 var mapboxUrl = "https://openstreetmap-on-heroku.herokuapp.com/{z}/{x}/{y}.mvt";
 var mapboxVectorTileOptions = {
-			rendererFactory: L.canvas.tile,
-			attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors, &copy; <a href="https://www.mapbox.com/about/maps/">MapBox</a>'
+			rendererFactory: L.svg.tile,
+			attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors, &copy; <a href="https://www.mapbox.com/about/maps/">MapBox</a>', 
+			vectorTileLayerStyles: vectorTileStyling
 };
 var mapboxPbfLayer = L.vectorGrid.protobuf(mapboxUrl, mapboxVectorTileOptions);
 mapboxPbfLayer.addTo(map);
