@@ -63,7 +63,7 @@ const createVectorTile = (sql,{ x, y, z }) => {
   ); 
   
   return new Promise((res, rej) => {
-    map.render(vector, (err, vectorTile) => {
+    map.render(vector, {}, (err, vectorTile) => {
       if (err) {
         return rej(err);
       };
