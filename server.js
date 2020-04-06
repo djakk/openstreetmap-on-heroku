@@ -29,7 +29,6 @@ function get_an_integer_from_a_string(the_string) {
   if (isNaN(the_integer_value)) {
     throw "bad int";
   };
-  console.log("ININININI ", the_string, the_integer_value);
   return the_integer_value;
 };
 
@@ -56,41 +55,33 @@ const createVectorTile = (sql,{ x, y, z }) => {
   );
   layer.styles = ['lines'];
   map.add_layer(layer);
-  console.log("XXXXXXXXXX");
-  console.log(map.toXML());
   
   const vector = new mapnik.VectorTile(
     get_an_integer_from_a_string(z), 
     get_an_integer_from_a_string(x), 
     get_an_integer_from_a_string(y)
   ); 
-  console.log("VVVVVV ", vector.x, vector.y, vector.z);
   
   return new Promise((res, rej) => {
     map.render(vector, (err, vectorTile) => {
       if (err) {
-        console.log("EEERRR " + err);
         return rej(err);
       };
       
       vectorTile.getData((err, buffer) => {
         if (err) {
-          console.log("EEERRR2 " + err);
           return rej(err);
         };
-        console.log("MMMMMM " + buffer);
         return res(buffer);
       });
-      console.log("NNNNNN " + vectorTile.getData().length);
-      console.log("NNNNN2 " + vectorTile.getData());
     });
   }).then((state) => {
-    console.log("KKKKKKK ");
+    /*console.log("KKKKKKK ");
     var the_json = vector.toJSON();
-    console.log(the_json);
+    console.log(the_json);*/
   })
   .catch((error) => {
-    console.log("RRRRRRR " + error);
+    //console.log("RRRRRRR " + error);
   });
 };
 
@@ -102,8 +93,6 @@ app.get('/:z/:x/:y.mvt', async (req, res) => {
       sql,
       req.params
     );
-    console.log("FFFFFF " + tile);
-    console.log("FFFFF2 " + req.params);
     res.setHeader(
         'Content-Type',
         'application/x-protobuf'
@@ -111,7 +100,6 @@ app.get('/:z/:x/:y.mvt', async (req, res) => {
     res.status(200);
     res.send(tile);
   } catch (error) {
-    console.log("EEEEEEE " + error);
     res.setHeader(
         'Content-Type',
         'text/plain'
