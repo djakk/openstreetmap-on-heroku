@@ -76,12 +76,14 @@ const createVectorTile = (sql,{ x, y, z }) => {
       });
     });
   }).then((state) => {
-    /*console.log("KKKKKKK ");
+    console.log("KKKKKKK ");
+    console.log(vector.z, vector.x, vector.y);
     var the_json = vector.toJSON();
-    console.log(the_json);*/
+    console.log(the_json);
+    console.log("-------- ");
   })
   .catch((error) => {
-    //console.log("RRRRRRR " + error);
+    console.log("RRRRRRR " + error);
   });
 };
 
