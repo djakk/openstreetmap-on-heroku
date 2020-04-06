@@ -17,6 +17,27 @@ var vectorTileStyling = {
 		color: '#f2b648',
 		fillOpacity: 0.2,
 		opacity: 0.4
+	}, 
+	tile: {	// mapbox & nextzen only
+		weight: 1,
+		fillColor: '#f2b648',
+		color: '#f2b648',
+		fillOpacity: 0.2,
+		opacity: 0.4
+	}, 
+	line: {	// mapbox & nextzen only
+		weight: 1,
+		fillColor: '#f2b648',
+		color: '#f2b648',
+		fillOpacity: 0.2,
+		opacity: 0.4
+	}, 
+	lines: {	// mapbox & nextzen only
+		weight: 1,
+		fillColor: '#f2b648',
+		color: '#f2b648',
+		fillOpacity: 0.2,
+		opacity: 0.4
 	}
 };
 
