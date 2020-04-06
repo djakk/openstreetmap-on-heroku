@@ -72,6 +72,7 @@ const createVectorTile = (sql,{ x, y, z }) => {
         if (err) {
           return rej(err);
         };
+        console.log("return res(buffer); " + res);
         return res(buffer);
       });
     });
