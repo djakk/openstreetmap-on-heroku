@@ -42,5 +42,5 @@ var mapboxVectorTileOptions = {
 var mapboxPbfLayer = L.vectorGrid.protobuf(mapboxUrl, mapboxVectorTileOptions).on('click',function(e) {
     console.log(e.layer);
     L.DomEvent.stop(e);
-};
+});
 mapboxPbfLayer.addTo(map);
