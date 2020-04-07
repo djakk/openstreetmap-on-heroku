@@ -62,7 +62,7 @@ var vectorTileStyling = {
 var mapboxUrl = "https://openstreetmap-on-heroku.herokuapp.com/{z}/{x}/{y}.mvt";
 var mapboxVectorTileOptions = {
 			rendererFactory: L.svg.tile,
-			attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors, &copy; <a href="https://www.mapbox.com/about/maps/">MapBox</a>', 
+			attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors', 
 			vectorTileLayerStyles: vectorTileStyling, 
 	                interactive: true
 };
