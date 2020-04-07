@@ -20,7 +20,6 @@ const dbConfig = {
     user: the_database_url.username,
     password: the_database_url.password, 
     table: '(SELECT way FROM planet_osm_line) AS my_lines', 
-    //table: "(SELECT way FROM planet_osm_line) AS planet_osm_line", 
     geometry_field: 'way'
 };
 
@@ -77,16 +76,6 @@ const createVectorTile = (sql,{ x, y, z }) => {
       });
     });
   });
-   /* .then((state) => {
-    console.log("KKKKKKK ");
-    console.log(vector.z, vector.x, vector.y);
-    var the_json = vector.toJSON();
-    console.log(the_json);
-    console.log("-------- ");
-  })
-  .catch((error) => {
-    console.log("RRRRRRR " + error);
-  });*/
 };
 
 
@@ -103,8 +92,6 @@ app.get('/:z/:x/:y.mvt', async (req, res) => {
     );
     res.status(200);
     res.send(tile);
-    console.log("SSSSSSS " + res);
-    console.log("------- " + tile);
   } catch (error) {
     res.setHeader(
         'Content-Type',
@@ -114,23 +101,6 @@ app.get('/:z/:x/:y.mvt', async (req, res) => {
     res.send("Error with this tile");
   };
 });
-/*
-app.get('/:z/:x/:y.mvt', async (req, res) => {
-  const sql = 'select geom from geo_table';
-  const tile = await createVectorTile(
-      sql,
-      req.params
-  );
-  console.log("FFFFFF " + tile);
-  console.log("FFFFF2 " + req.params);
-  res
-    .setHeader(
-        'Content-Type',
-        'application/x-protobuf'
-  )
-    .status(200).send(tile);
-});
-*/
 
 app.get('/', function (req, res) {
   res.send('Hello World!');
