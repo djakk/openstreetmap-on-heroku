@@ -53,3 +53,7 @@ Leaflet and Vector Tiles :
 https://github.com/Leaflet/Leaflet.VectorGrid
 
 
+## To be done : 
+
+* Tile caching system
+* Minutely update of the postgresql database
